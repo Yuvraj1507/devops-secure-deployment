@@ -1,0 +1,6 @@
+# Trivy Configuration for Security Scanning
+version: "1"
+severity: "CRITICAL,HIGH"
+ignore-unfixed: true
+offline-scan: false
+vulnerability-db: "full"

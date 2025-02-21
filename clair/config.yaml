@@ -1,0 +1,11 @@
+# Placeholder file
+clair:
+  database:
+    type: "pgsql"
+    options:
+      source: "postgresql://clairuser:clairpassword@clair-db:5432/clair"
+  api:
+    addr: ":6060"
+    health_addr: ":6061"
+  updater:
+    interval: 1h

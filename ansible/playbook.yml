@@ -1,0 +1,26 @@
+# Placeholder file
+- name: Configure Kubernetes Nodes
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install required packages
+      apt:
+        name: ['docker.io', 'kubelet', 'kubeadm', 'kubectl']
+        state: present
+
+    - name: Enable and start Docker service
+      service:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Initialize Kubernetes Cluster
+      shell: kubeadm init --pod-network-cidr=10.244.0.0/16
+      when: inventory_hostname == 'master'
+
+    - name: Copy kubeconfig to root user
+      shell: |
+        mkdir -p $HOME/.kube
+        cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        chown $(id -u):$(id -g) $HOME/.kube/config
+

@@ -1,0 +1,4 @@
+- name: Install common packages
+  apt:
+    name: ['curl', 'vim', 'wget']
+    state: present

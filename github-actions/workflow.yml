@@ -1,0 +1,35 @@
+# Placeholder file
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set Up Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Terraform Init & Apply
+      run: |
+        cd infrastructure/terraform
+        terraform init
+        terraform apply -auto-approve
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f kubernetes/deployment.yaml
+        kubectl apply -f kubernetes/service.yaml
+        kubectl apply -f kubernetes/ingress.yaml
+
+    - name: Run Trivy Security Scan
+      run: |
+        chmod +x security/trivy-scan.sh
+        ./security/trivy-scan.sh
